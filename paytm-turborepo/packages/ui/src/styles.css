@@ -1,0 +1,5 @@
+/* Component-level styles for the UI package */
+@import "tailwindcss" prefix(ui);
+
+/* Scan the package source so local Tailwind utilities are generated consistently. */
+@source "./**/*.{js,ts,jsx,tsx}";
