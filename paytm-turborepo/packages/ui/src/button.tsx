@@ -1,15 +1,31 @@
 "use client";
 
-import { JSX, ReactNode } from "react"
+import React, { type ButtonHTMLAttributes, type JSX, type ReactNode } from "react";
 
-interface ButtonProps{
-    children:ReactNode;
-    onClick: ()=>void;
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    children: ReactNode;
+    variant?: "primary" | "secondary";
 }
 
-export const Button = ({onClick, children}:ButtonProps):JSX.Element=>{
+export const Button = ({
+    children,
+    className = "",
+    disabled,
+    variant = "primary",
+    ...props
+}: ButtonProps): JSX.Element => {
+    const variantClass =
+        variant === "primary"
+            ? "bg-slate-950 text-white hover:bg-slate-800 focus:ring-slate-200"
+            : "border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 focus:ring-slate-200";
+
     return (
-        <button className="cursor-pointer text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2" type="button" onClick={onClick}>
+        <button
+            className={`inline-flex min-h-11 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-60 ${variantClass} ${className}`}
+            disabled={disabled}
+            type="button"
+            {...props}
+        >
             {children}
         </button>
     );

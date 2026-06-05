@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "@repo/tailwind-config/shared-styles.css";
 
 /* Scan shared UI source so Tailwind can pick up class usage from monorepo packages. */
 @source "../../../packages/ui/src/**/*.{js,ts,jsx,tsx}";

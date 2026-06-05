@@ -1,9 +1,10 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+import type { NextAuthOptions } from "next-auth";
 import bcrypt from 'bcrypt';
 import { prisma } from "@repo/db";
 
 const SALT_ROUND = 10;
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
     providers:[
         CredentialsProvider({
             name:"Credentials",
@@ -36,7 +37,13 @@ export const authOptions = {
                     const user = await prisma.user.create({
                         data:{
                             number:credentials?.phone || "",
-                            password: hashedPassword
+                            password: hashedPassword,
+                            balance: {
+                                create: {
+                                    amount: 0,
+                                    locked: 0
+                                }
+                            }
                         }
                     });
                     return {
@@ -53,5 +60,12 @@ export const authOptions = {
         })
     ],
     secret:process.env.JWT_SECRET,
-    
+    callbacks:{
+        async session({token, session}){
+            if (session.user) {
+                session.user.id = token.sub || "";
+            }
+            return session
+        }
+    }
 }

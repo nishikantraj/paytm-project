@@ -1,0 +1,9 @@
+npm warn Unknown project config "auto-install-peers". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3001
+- PID:          26796
+- Dir:          C:\Users\nishi\OneDrive\Desktop\Cohort0-1\paytm-project\paytm-turborepo\apps\user-app
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 26796 /F to stop it.

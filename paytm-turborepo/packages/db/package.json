@@ -4,5 +4,8 @@
   "type": "module",
   "exports": {
     ".": "./index.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
