@@ -39,7 +39,7 @@ export default async function Dashboard() {
   if(!session?.user){
     return (
       <div>
-        user not logged it
+        user not logged in
       </div>
     )
   }

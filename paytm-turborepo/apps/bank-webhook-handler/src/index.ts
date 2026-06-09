@@ -3,8 +3,13 @@ import {prisma} from "@repo/db"
 
 const app = express();
 
-app.post('/hdfcWebHook',async(req, res)=>{
+app.use(express.json())
 
+app.get('/',(req,res)=>{
+    return res.status(200).json({message:"ok"})
+})
+app.post('/hdfcWebHook',async(req, res)=>{
+    
     const paymentInformation : {
         token: string,
         userId: number,
@@ -14,28 +19,42 @@ app.post('/hdfcWebHook',async(req, res)=>{
         userId: req.body.user_identifier,
         amount: req.body.amount
     }
-
+    
     try {
-        await prisma.$transaction([
-            prisma.balances.updateMany({
-                where:{
-                    userId: paymentInformation.userId
-                },
-                data:{
-                    amount:{
-                        increment: Number(paymentInformation.amount)
+        const isProcessing = await prisma.onRampTransaction.findFirst({
+            where:{
+                token: paymentInformation.token
+            },
+            select:{
+                status:true
+            }
+        })
+
+        if(isProcessing?.status === "Processing"){
+            await prisma.$transaction([
+                prisma.balances.update({
+                    where:{
+                        userId: paymentInformation.userId
+                    },
+                    data:{
+                        amount:{
+                            increment: Number(paymentInformation.amount)
+                        }
                     }
-                }
-            }),
-            prisma.onRampTransaction.updateMany({
-                where:{
-                    userId: paymentInformation.userId
-                },
-                data:{
-                    status:"Success"
-                }
-            })
-        ]);
+                }),
+                prisma.onRampTransaction.update({
+                    where:{
+                        token: paymentInformation.token
+                    },
+                    data:{
+                        status:"Success"
+                    }
+                })
+            ]);
+        }
+        else{
+            return res.status(422).json({message:"can't be captured"})
+        }
         
         return res.status(200).json({message:"captured"})
     } catch (error) {
@@ -44,3 +63,8 @@ app.post('/hdfcWebHook',async(req, res)=>{
     }
     
 })
+
+const PORT =  3000;
+app.listen(PORT, () => {
+  console.log(`Webhook handler running on port ${PORT}`);
+});
