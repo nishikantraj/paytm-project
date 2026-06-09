@@ -59,7 +59,36 @@ async function main() {
             }
         }
     });
-    console.log({alice, bob});    
+
+    const alina = await prisma.user.upsert({
+        where:{
+            id: 456
+        },
+        update:{},
+        create:{
+            number:"5749",
+            password: await bcrypt.hash("pass", 10),
+            name: "Alina",
+            email: "alina@gmail.com",
+            balance:{
+                create:{
+                    amount:200000,
+                    locked:0
+                }
+            },
+            onRampTransations:{
+                create:{
+                    startTime: new Date(),
+                    status:"Success",
+                    amount: 2000,
+                    token: "token_3",
+                    provider: "HDFC Bank"
+                }
+            }
+        }
+    });
+
+    console.log({alice, bob, alina});    
 }
 
 main().then(async()=>{
