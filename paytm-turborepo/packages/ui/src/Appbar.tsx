@@ -14,20 +14,35 @@ export const Appbar = ({
 })=>{
 
     return (
-        <header className="sticky top-0 z-20 flex min-h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur">
-            <div>
-                <div className="text-lg font-extrabold text-blue-500">Paytm Wallet</div>
-                <div className="text-xs tracking-tighter text-slate-500">Fast payments, clean tracking</div>
-            </div>
-            <div className="flex items-center gap-3">
-                {user ? <div className="hidden text-right sm:block">
-                    <div className="text-sm font-medium text-slate-900">{user.name || "Wallet user"}</div>
-                    <div className="text-xs text-slate-500">{user.email}</div>
-                </div> : null}
-                <Button onClick={user ? onSignout : onSignin} variant={user ? "secondary" : "primary"}>
+        <div>
+            {/* Minimal Header */}
+            <header className="px-6 py-4 flex items-center justify-between border-b border-slate-200 bg-white">
+                {/* Left Side: Brand */}
+                <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-slate-950 rounded-md flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">S</span>
+                    </div>
+                    <span className="text-sm font-bold text-slate-950">SMPL</span>
+                </div>
+                
+                {/* Right Side: User & Actions Grouped */}
+                <div className="flex items-center gap-4">
+                    {user ? (
+                    <div className="hidden text-right sm:block">
+                        <div className="text-sm font-medium text-slate-900">{user.name || "Wallet user"}</div>
+                        <div className="text-xs text-slate-500">{user.email}</div>
+                    </div>
+                    ) : null}
+                    
+                    <Button 
+                    onClick={user ? onSignout : onSignin} 
+                    variant={user ? "secondary" : "primary"}
+                    >
                     {user ? "Logout" : "Login"}
-                </Button>
-            </div>
-        </header>
+                    </Button>
+                </div>
+
+            </header>
+        </div>
     );
 }
